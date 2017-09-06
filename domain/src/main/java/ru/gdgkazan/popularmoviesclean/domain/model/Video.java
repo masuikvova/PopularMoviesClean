@@ -8,6 +8,11 @@ public class Video {
     private String mKey;
     private String mName;
 
+    public Video(String key, String name){
+        this.mKey = key;
+        this.mName = name;
+    }
+
     public String getKey() {
         return mKey;
     }

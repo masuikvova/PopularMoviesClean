@@ -11,12 +11,15 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -26,9 +29,11 @@ import ru.gdgkazan.popularmoviesclean.R;
 import ru.gdgkazan.popularmoviesclean.domain.model.Movie;
 import ru.gdgkazan.popularmoviesclean.domain.model.Review;
 import ru.gdgkazan.popularmoviesclean.domain.model.Video;
+import ru.gdgkazan.popularmoviesclean.screen.general.LoadingDialog;
+import ru.gdgkazan.popularmoviesclean.screen.general.LoadingView;
 import ru.gdgkazan.popularmoviesclean.utils.Images;
 
-public class MovieDetailsActivity extends AppCompatActivity {
+public class MovieDetailsActivity extends AppCompatActivity implements DetailsView {
 
     private static final String MAXIMUM_RATING = "10";
 
@@ -52,6 +57,16 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     @BindView(R.id.rating)
     TextView mRatingTextView;
+
+    @BindView(R.id.rvReviews)
+    RecyclerView rvReviews;
+
+    @BindView(R.id.rvVideos)
+    RecyclerView rvVideos;
+
+    private LoadingView mLoadingView;
+    private ReviewsAdapter reviewAdapter = new ReviewsAdapter();
+    private VideosAdapter videoAdapter = new VideosAdapter();
 
     public static void navigate(@NonNull AppCompatActivity activity, @NonNull View transitionImage,
                                 @NonNull Movie movie) {
@@ -80,6 +95,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         Movie movie = (Movie) getIntent().getSerializableExtra(EXTRA_MOVIE);
         showMovie(movie);
+
+        rvReviews.setLayoutManager(new LinearLayoutManager(this));
+        rvReviews.setAdapter(reviewAdapter);
+        rvVideos.setLayoutManager(new LinearLayoutManager(this));
+        rvVideos.setAdapter(videoAdapter);
+        mLoadingView = LoadingDialog.view(getSupportFragmentManager());
 
         /**
          * TODO : task
@@ -142,12 +163,28 @@ public class MovieDetailsActivity extends AppCompatActivity {
         mRatingTextView.setText(getString(R.string.rating, average, MAXIMUM_RATING));
     }
 
-    private void showTrailers(@NonNull List<Video> videos) {
-        // TODO : show trailers
+    @Override
+    public void showTrailers(@NonNull List<Video> videos) {
+        videoAdapter.setData(videos);
     }
 
-    private void showReviews(@NonNull List<Review> reviews) {
-        // TODO : show reviews
+    @Override
+    public void showReviews(@NonNull List<Review> reviews) {
+        reviewAdapter.setData(reviews);
     }
 
+    @Override
+    public void showError() {
+        Toast.makeText(this,"Error to get details", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showLoadingIndicator() {
+        mLoadingView.showLoadingIndicator();
+    }
+
+    @Override
+    public void hideLoadingIndicator() {
+        mLoadingView.hideLoadingIndicator();
+    }
 }
