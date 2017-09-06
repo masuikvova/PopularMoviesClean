@@ -11,6 +11,6 @@ public class MoviesMapper implements Func1<ru.gdgkazan.popularmoviesclean.data.m
     @Override
     public Movie call(ru.gdgkazan.popularmoviesclean.data.model.content.Movie movie) {
         return new Movie(movie.getPosterPath(), movie.getOverview(),
-                movie.getTitle(), movie.getReleasedDate(), movie.getVoteAverage());
+                movie.getTitle(), movie.getReleasedDate(), movie.getVoteAverage(),movie.getId());
     }
 }

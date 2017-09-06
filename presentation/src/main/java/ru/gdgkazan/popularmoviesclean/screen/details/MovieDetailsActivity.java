@@ -25,12 +25,19 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ru.arturvasilov.rxloader.LifecycleHandler;
+import ru.arturvasilov.rxloader.LoaderLifecycleHandler;
+import ru.arturvasilov.rxloader.RxUtils;
 import ru.gdgkazan.popularmoviesclean.R;
+import ru.gdgkazan.popularmoviesclean.data.repository.RepositoryProvider;
 import ru.gdgkazan.popularmoviesclean.domain.model.Movie;
 import ru.gdgkazan.popularmoviesclean.domain.model.Review;
 import ru.gdgkazan.popularmoviesclean.domain.model.Video;
+import ru.gdgkazan.popularmoviesclean.domain.usecase.DetailsUseCase;
+import ru.gdgkazan.popularmoviesclean.domain.usecase.MoviesUseCase;
 import ru.gdgkazan.popularmoviesclean.screen.general.LoadingDialog;
 import ru.gdgkazan.popularmoviesclean.screen.general.LoadingView;
+import ru.gdgkazan.popularmoviesclean.screen.movies.MoviesPresenter;
 import ru.gdgkazan.popularmoviesclean.utils.Images;
 
 public class MovieDetailsActivity extends AppCompatActivity implements DetailsView {
@@ -101,6 +108,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements DetailsVi
         rvVideos.setLayoutManager(new LinearLayoutManager(this));
         rvVideos.setAdapter(videoAdapter);
         mLoadingView = LoadingDialog.view(getSupportFragmentManager());
+
+        DetailsUseCase detailsUseCase = new DetailsUseCase(RepositoryProvider.getMoviesRepository(), RxUtils.async());
+        LifecycleHandler lifecycleHandler = LoaderLifecycleHandler.create(this, getSupportLoaderManager());
+        DetailsPresenter presenter = new DetailsPresenter(this, detailsUseCase, lifecycleHandler);
+        presenter.init(movie.getId());
 
         /**
          * TODO : task
@@ -180,11 +192,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements DetailsVi
 
     @Override
     public void showLoadingIndicator() {
+
         mLoadingView.showLoadingIndicator();
     }
 
     @Override
     public void hideLoadingIndicator() {
+
         mLoadingView.hideLoadingIndicator();
     }
 }

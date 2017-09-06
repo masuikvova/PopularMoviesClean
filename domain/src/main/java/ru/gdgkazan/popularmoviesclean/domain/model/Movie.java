@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 public class Movie implements Serializable {
 
+    private int id;
     private String mPosterPath;
     private String mOverview;
     private String mTitle;
@@ -17,12 +18,13 @@ public class Movie implements Serializable {
     }
 
     public Movie(String posterPath, String overview,
-                 String title, String releasedDate, double voteAverage) {
+                 String title, String releasedDate, double voteAverage,int id) {
         mPosterPath = posterPath;
         mOverview = overview;
         mTitle = title;
         mReleasedDate = releasedDate;
         mVoteAverage = voteAverage;
+        this.id =id;
     }
 
     public String getPosterPath() {
@@ -63,5 +65,13 @@ public class Movie implements Serializable {
 
     public void setVoteAverage(double voteAverage) {
         mVoteAverage = voteAverage;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
