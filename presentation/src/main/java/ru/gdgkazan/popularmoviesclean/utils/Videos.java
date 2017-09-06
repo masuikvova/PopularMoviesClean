@@ -5,7 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
-import ru.gdgkazan.popularmoviesclean.data.model.content.Video;
+import ru.gdgkazan.popularmoviesclean.domain.model.Video;
+
 
 /**
  * @author Artur Vasilov
@@ -22,5 +23,4 @@ public final class Videos {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl));
         context.startActivity(intent);
     }
-
 }

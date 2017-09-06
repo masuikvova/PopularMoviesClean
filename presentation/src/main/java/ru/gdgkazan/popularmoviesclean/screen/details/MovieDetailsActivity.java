@@ -39,8 +39,9 @@ import ru.gdgkazan.popularmoviesclean.screen.general.LoadingDialog;
 import ru.gdgkazan.popularmoviesclean.screen.general.LoadingView;
 import ru.gdgkazan.popularmoviesclean.screen.movies.MoviesPresenter;
 import ru.gdgkazan.popularmoviesclean.utils.Images;
+import ru.gdgkazan.popularmoviesclean.utils.Videos;
 
-public class MovieDetailsActivity extends AppCompatActivity implements DetailsView {
+public class MovieDetailsActivity extends AppCompatActivity implements DetailsView, VideosAdapter.OnItemClickListener {
 
     private static final String MAXIMUM_RATING = "10";
 
@@ -73,7 +74,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements DetailsVi
 
     private LoadingView mLoadingView;
     private ReviewsAdapter reviewAdapter = new ReviewsAdapter();
-    private VideosAdapter videoAdapter = new VideosAdapter();
+    private VideosAdapter videoAdapter = new VideosAdapter(this);
 
     public static void navigate(@NonNull AppCompatActivity activity, @NonNull View transitionImage,
                                 @NonNull Movie movie) {
@@ -200,5 +201,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements DetailsVi
     public void hideLoadingIndicator() {
 
         mLoadingView.hideLoadingIndicator();
+    }
+
+    @Override
+    public void onItemClick(@NonNull View view, @NonNull Video video) {
+        Videos.browseVideo(this,video);
     }
 }
